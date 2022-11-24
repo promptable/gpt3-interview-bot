@@ -195,8 +195,7 @@ def run_completion(
 def main():
     utils.init_page_layout()
     session = st.session_state
-    import os
-    oai_client = init_oai_client(os.environ["OPENAI_API_KEY"])
+    oai_client = init_oai_client(st.secrets["OPENAI_API_KEY"])
 
     if "transcript" not in session:
         session.transcript = [INITIAL_TRANSCRIPT]
