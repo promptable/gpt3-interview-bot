@@ -1,0 +1,16 @@
+diskcache
+python-dotenv
+streamlit
+streamlit-aggrid
+stqdm
+openai
+tenacity
+websocket
+httpx
+trio-websocket
+pydantic
+trio
+
+# Dev
+black
+isort
