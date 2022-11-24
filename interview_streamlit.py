@@ -33,7 +33,10 @@ MODELS = [
 FEEDBACK_PROMPT = """
 (End of interview)
 
-Please provide feedback on the candidate's performance.
+Please provide feedback on the candidate's performance in the interview. Even if their resume is great
+it's important to focus on their interview performance. If the chat is short and you don't have enough
+information to provide feedback, please provide feedback on the resume instead. And explain that you 
+would like to see more of the candidate in the interview.
 
 Please include the following information:
 * Candidates strengths
@@ -41,7 +44,23 @@ Please include the following information:
 * Overall conclusion
 * Hire / No-Hire recommendation
 
-FEEDBACK:
+Your feedback should be in the following format:
+
+Strengths:
+
+<list strengths here>
+
+Weaknesses:
+
+<list weaknesses here>
+
+Conclusion:
+
+<conclusion here>
+
+Recommendation: <Hire / No-Hire>
+
+YOUR FEEDBACK:
 """.strip()
 
 INITIAL_TRANSCRIPT = "Interviewer: Hi, how are you doing today?"
@@ -135,12 +154,11 @@ BEGIN!
 
 
 @st.cache(ttl=60 * 60 * 24)
-def init_oai_client():
-    ctx = Settings.from_env_file(".env.secret")
-    cache = diskcache.Cache(directory=ctx.disk_cache_dir)
+def init_oai_client(oai_api_key: str):
+    cache = diskcache.Cache(directory="/tmp/cache")
     oai_client = OAIClient(
-        api_key=ctx.openai_api_key,
-        organization_id=ctx.openai_org_id,
+        api_key=oai_api_key,
+        organization_id=None,
         cache=cache,
     )
     return oai_client
@@ -153,6 +171,7 @@ def run_completion(
     stop: Union[List[str], None],
     max_tokens: int,
     temperature: float,
+    best_of: int = 1,
 ):
     print("Running completion!")
     if stop:
@@ -168,6 +187,7 @@ def run_completion(
         max_tokens=max_tokens,  # type: ignore
         temperature=temperature,
         stop=stop or None,
+        best_of=best_of,
     )
     return resp
 
@@ -175,7 +195,7 @@ def run_completion(
 def main():
     utils.init_page_layout()
     session = st.session_state
-    oai_client = init_oai_client()
+    oai_client = init_oai_client(st.secrets["OPENAI_API_KEY"])
 
     if "transcript" not in session:
         session.transcript = [INITIAL_TRANSCRIPT]
@@ -226,9 +246,10 @@ def main():
             "Interview Chat",
             height=50,
             key="candidate_text",
+            help="Write the candidate text here"
         )
 
-        run_button = st.button("Run Prompt", help="Run the prompt", on_click=clear_text)
+        run_button = st.button("Enter", help="Submit your chat", on_click=clear_text)
         if run_button:
             if not resume_text:
                 st.error("Please enter a resume")
@@ -275,6 +296,7 @@ def main():
                     stop=stop,
                     max_tokens=400,  # type: ignore
                     temperature=temperature,
+                    best_of=3,
                 )
                 st.write(resp["completion"])
 

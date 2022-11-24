@@ -4,6 +4,7 @@
 .chat_turns
 streamlit_apps
 .vscode
+.streamlit/secrets.toml
 
 # TODO(bfortuner): remove
 anthro*
