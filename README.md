@@ -1,14 +1,6 @@
-# Streamlit Playground (e.g. OpenAI Playground)
+# GPT3 Interview Bot
 
-(Attempt) to replicate OpenAI playground in Streamlit, but with additional features like running batches of inputs.
-
-### Playground
-
-![Playground](data/playground.png)
-
-### Batch Inputs
-
-![Batch Inputs](data/inputs.png)
+Give yourself practice interviews with GPT3. Paste in Resume, Question, get interviewed, and receive feedback.
 
 
 ## Setup
@@ -45,27 +37,20 @@ pip3 install -r requirements.txt
 
 ```bash
 # Run the streamlit app
-streamlit run playground_streamlit.py
+streamlit run interview_streamlit.py
 
 # Should open a new tab in your browser at
 http://localhost:8501/
 
 # If running on remote box (EC2, etc). Expose the port, then:
-streamlit run --server.headless true playground_streamlit.py --server.port 8502
+streamlit run --server.headless true interview_streamlit.py --server.port 8502
 ```
 
 ## Adding passwords
 
-If you're hosting, do this to get password protection.
+Do this to get password protection. (Also need to wrap main() call in the password check)
 
 ```bash
-
+# .streamlit/secrets.toml
+password = "yourpassword"
 ```
-
-## Backlog
-
-- S3 backend for saving prompts, inputs
-- Add more models/providers
-- Streaming completions
-
-Feel free to add features and submit PRs!
