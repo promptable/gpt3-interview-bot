@@ -54,3 +54,14 @@ Do this to get password protection. (Also need to wrap main() call in the passwo
 # .streamlit/secrets.toml
 password = "yourpassword"
 ```
+
+## Deploy
+
+Deploy using Docker and Fly.io
+- https://docs.streamlit.io/knowledge-base/tutorials/deploy/docker
+- https://fly.io/docs/reference/secrets/#setting-secrets
+
+```bash
+fly launch
+fly deploy --local-only
+```

@@ -193,10 +193,20 @@ def run_completion(
     return resp
 
 
+def get_oai_key():
+    import os
+    oai_key = st.secrets.get("OPENAI_API_KEY")
+    if oai_key is None:
+        oai_key = os.environ.get("OPENAI_API_KEY")
+    if oai_key is None:
+        raise Exception("Must set `OPENAI_API_KEY` environment variable or in .streamlit/secrets.toml")
+    return oai_key
+
+
 def main():
     utils.init_page_layout()
     session = st.session_state
-    oai_client = init_oai_client(st.secrets["OPENAI_API_KEY"])
+    oai_client = init_oai_client(get_oai_key())
 
     if "transcript" not in session:
         session.transcript = [INITIAL_TRANSCRIPT]
