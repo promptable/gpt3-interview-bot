@@ -11,6 +11,7 @@ from settings import Settings
 import utils
 
 MODELS = [
+    "text-davinci-003",
     "text-davinci-002",
     "text-curie-001",
     "text-babbage-001",
