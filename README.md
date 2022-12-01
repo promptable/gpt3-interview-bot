@@ -2,7 +2,7 @@
 
 Give yourself practice interviews with GPT3. Paste in Resume, Question, get interviewed, and receive feedback.
 
-Try it at: gpt-interview-bot.fly.dev
+Try it at: http://gpt-interview-bot.fly.dev
 
 
 ## Setup
